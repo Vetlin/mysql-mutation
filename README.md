@@ -13,13 +13,13 @@ How to use it? Oooh, it is very simple :blush:
 2. Create a new file in your project, wherever you want
 
 3. Write a little bit of code there
-  ```javascript
-  const Mutation = require('@vetlin/mysql-mutation');
-  
-  const m = new Mutation({options...});
-  
-  m.run();
-  ```
+    ```javascript
+    const Mutation = require('@vetlin/mysql-mutation');
+
+    const m = new Mutation({options...});
+
+    m.run();
+    ```
 4. Then you should create new npm script, something like this
     ```javascript
     ...

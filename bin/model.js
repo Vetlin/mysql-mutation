@@ -1,30 +1,18 @@
 const debug = require('./debug');
-const DB = require('./db');
-const validator = require('./validator');
+const db = require('./db');
 
 const Model = class {
 
-    constructor(config, clear) {
-
-        this.execute(config, clear);
-
-    }
-
     async execute(config, clear) {
-
-        // Validate user params
-        validator.validate(config);
 
         this.config = config;
 
         // DB initialization
-        let db = new DB({
+        this.db = await db.connect({
             host: this.config.host,
             user: this.config.user,
             password: this.config.password,
         });
-
-        this.db = await db.connect();
 
         if (clear) {
             await this.clear();
@@ -40,18 +28,20 @@ const Model = class {
 
         // Create tables
         for(let tableName in config.tables) {
-            let tableObj = config.tables[tableName];
-            await this.createTable(config.name, tableName, tableObj)
+            await this.createTable(config.name, tableName, config.tables[tableName])
             if (config.autofill && config.autofill[tableName]) {
                 this.tableAutofill(config.name, tableName, config.autofill[tableName]);
             }
         }
 
+        debug.success('Everything is fine! Now you van write your cool code :)')
+        process.exit();
+
     }
 
     async createDatabase(name) {
         await this.db.query(`CREATE DATABASE IF NOT EXISTS ${name};`);
-        debug.success(`Database ${name} has been created!!!`)
+        debug.success(`Database ${name} has been created!`)
 
     }
 
@@ -137,4 +127,4 @@ const Model = class {
 
 }
 
-module.exports = Model;
+module.exports = new Model();

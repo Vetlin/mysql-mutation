@@ -1,14 +1,9 @@
 const mysql = require('mysql2/promise');
-const debug = require('./debug');
 
 const DB = class {
 
-    constructor(params) {
-        this.params = params;
-    }
-
-    async connect() {
-        this.db = await mysql.createConnection(this.params);
+    async connect(params) {
+        this.db = await mysql.createConnection(params);
         return this;
     }
 
@@ -18,4 +13,4 @@ const DB = class {
 
 }
 
-module.exports = DB;
+module.exports = new DB();
